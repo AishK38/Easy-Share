@@ -3,7 +3,7 @@
     --border-color: rgb(245, 78, 215);
 }
 html, body {
-    font-family: syste-ui;
+    font-family: system-ui;
     background: var(--main-bg-color);
     height: 100%;
     padding: 0;
@@ -16,11 +16,13 @@ html, body {
     border: 2px dashed var(--border-color);
     margin: 30px;
     border-radius: 10px;
+    transition: all .2s ease;
 }
 
-body{
+body, .drop-zone{
     display: flex;
     align-items: center;
+    flex-direction: column;
     justify-content: center;
 }
 
@@ -28,4 +30,42 @@ body{
     background: white;
     border-radius: 25px;
     box-shadow: 0px 20px 20px grey;
+}
+.icon-container img{
+    width: 100px;
+    position: absolute;
+    transform-origin: bottom;
+    transition: transform 200ms ease-in-out;
+
+}
+.dragged.drop-zone{
+    background: var(--main-bg-color);
+    border-color: rgb(97, 52, 84);
+}
+.icon-container .center{
+    z-index: 2;
+}
+.icon-container {
+    width: 80px;
+    position: relative;
+    height: 125px;
+}
+.dragged .icon-container .left{
+   transform:rotate(-10deg) translateX(-15px) scale(0.9);
+   filter: grayscale(0.3);
+}
+.dragged .icon-container .right{
+    transform: rotate(10deg) translateX(15px) scale(0.9);
+    filter: grayscale(0.3);
+}
+.dragged .icon-container .center {
+    transform: translateY(-5px);
+}
+
+#fileinp {
+    display: none;
+}
+.browse{
+    color: rgb(236, 93, 195);
+    cursor: pointer;
 }
