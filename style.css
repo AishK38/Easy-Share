@@ -1,6 +1,7 @@
 :root {
     --main-bg-color: #e7c4e4;
     --border-color: rgb(245, 78, 215);
+    --container-width: 500px;
 }
 html, body {
     font-family: system-ui;
@@ -11,7 +12,7 @@ html, body {
 }
 
 .drop-zone{
-    width: 500px;
+    width: var(--container-width);
     min-height: 250px;
     border: 2px dashed var(--border-color);
     margin: 30px;
@@ -19,7 +20,7 @@ html, body {
     transition: all .2s ease;
 }
 
-body, .drop-zone{
+body, .drop-zone, .upload-container{
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -68,4 +69,23 @@ body, .drop-zone{
 .browse{
     color: rgb(236, 93, 195);
     cursor: pointer;
+}
+
+.progressbar{
+   width: var(--container-width);
+   height: 75px;
+   border: 2px solid var(--main-bg-color);
+   margin-bottom: 30px;
+   border-radius: 10px;
+   position: relative;
+}
+
+.bg-progress{
+    width: 0%;
+    height: 100%;
+    background: var(--main-bg-color);
+    transform-origin: left;
+    border-radius: 10px;
+    transition: width .25s linear;
+    position: absolute;
 }
