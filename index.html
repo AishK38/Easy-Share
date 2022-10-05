@@ -20,8 +20,17 @@
         </div>
         <div class="progressbar">
             <div class="bg-progress"></div>
-            <div class="title">Uploading...</div>
-            <div class="perc-box"><span id="perc">0</span></div>
+            <div class="innerpart">
+              <div class="title" style="margin: 10px 15px; font-size: 15px;">Uploading...</div>
+              <div class="perc-box" style="margin: 10px 15px;font-size: 13px"><span id="perc">0</span>%</div>
+              <div class="smallbar"></div>
+            </div>  
+        </div>
+        <div class="sharingbox">
+            <p class="expire">Share link expires in 24 hours</p>
+            <div class="inputbox">
+                <input type="text" id="fileURL" readonly>
+            </div>
         </div>
      </section>
      <script src="index.js"></script>

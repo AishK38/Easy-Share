@@ -4,6 +4,10 @@ const browsebtn = document.querySelector(".browse");
 const host = "";
 const uploadurl = `${host}api/files`;
 const bgProgress = document.querySelector(".bg-progress");
+const percentupdates = document.querySelector("#perc");
+const progressbar = document.querySelector(".smallbar");
+const progressContainer = document.querySelector(".progressbar");
+
 
 dropzone.addEventListener("dragover", (e)=>{
     e.preventDefault();
@@ -20,6 +24,12 @@ dropzone.addEventListener("dragleave", ()=>{
 dropzone.addEventListener("drop", (e)=>{
     e.preventDefault();
     dropzone.classList.remove("dragged");
+    const files = e.dataTransfer.files;
+    console.table(files);
+    if(files.length){
+        fileinput.files = files;
+        uploadfile();
+    }
 });
 
 browsebtn.addEventListener("click", ()=>{
@@ -31,6 +41,7 @@ fileinput.addEventListener("change", () => {
 });
 
 const uploadfile = () => {
+    progressContainer.style.display = "block";
     const file = fileinput.files[0];
     const formData = new FormData();
     formData.append("myfile", file);
@@ -39,6 +50,7 @@ const uploadfile = () => {
     xhr.onreadystatechange = () => {
       if(xhr.readyState === XMLHttpRequest.DONE) {  
         console.log(xhr.response);
+        showlink(JSON.parse(xhr.response));
       }  
     };
     xhr.upload.onprogress = updateProgress;
@@ -48,6 +60,12 @@ const uploadfile = () => {
 
 const updateProgress = (e) => {
     const perc = Math.round((e.loaded / e.total) * 100);
-    console.log(perc);
+   // console.log(perc);
     bgProgress.style.width = `${perc}%`;
-}
+    percentupdates.innerText = perc;
+    progressbar.style.transform = `scaleX(${perc/100})`;
+ }
+
+ const showlink = ({file})=>{
+    progressContainer.style.display = 'none';
+ }

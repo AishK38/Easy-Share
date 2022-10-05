@@ -78,9 +78,15 @@ body, .drop-zone, .upload-container{
    margin-bottom: 30px;
    border-radius: 10px;
    position: relative;
+   display: none;
 }
 
-.bg-progress{
+.perc-box{
+    opacity: 0.8;
+    margin: 5px;
+}
+
+.progressbar .bg-progress{
     width: 0%;
     height: 100%;
     background: var(--main-bg-color);
@@ -88,4 +94,20 @@ body, .drop-zone, .upload-container{
     border-radius: 10px;
     transition: width .25s linear;
     position: absolute;
+}
+
+.progressbar .innerpart{
+    position: absolute;
+    z-index: 1;
+    width: calc(100% - 30px);
+}
+.smallbar{
+    height: 3px;
+    width: 100%;
+    background: rgb(97, 52, 84);
+    transform-origin: left;
+    border-radius: 2px;
+    margin: 10px 15px;
+    transform: scaleX(0);
+    transition: transform 0.25s linear;
 }
