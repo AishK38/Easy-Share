@@ -32,6 +32,22 @@
                 <input type="text" id="fileURL" readonly>
                 <img src="./copy.svg" alt="copy icon" id="copybtn">
             </div>
+            <p style="text-align: center; opacity: 0.6;">Or Send Via Email</p>
+            <div class="emailbox">
+                <form id="emailform">
+                  <div class="field">
+                    <label for="sender">Enter your email</label>
+                    <input type="email" autocomplete="email" required name="sender-mail" id="sender">
+                  </div>
+                  <div class="field">
+                    <label for="receiver">Enter receiver's email</label>
+                    <input type="email" autocomplete="email" required name="to-mail" id="receiver">
+                  </div>
+                  <div class="send-btn-container">
+                    <button type="submit">Send</button>
+                  </div>
+                </form>   
+            </div>
         </div>
      </section>
      <script src="index.js"></script>

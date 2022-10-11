@@ -1,15 +1,19 @@
 const dropzone = document.querySelector(".drop-zone");
 const fileinput = document.querySelector("#fileinp");
 const browsebtn = document.querySelector(".browse");
-const host = "";
-const uploadurl = `${host}api/files`;
+const base = "";
+const uploadurl = `${base}/api/files`;
+const emailURL = `${base}/api/files/send`;
+
 const bgProgress = document.querySelector(".bg-progress");
 const percentupdates = document.querySelector("#perc");
 const progressbar = document.querySelector(".smallbar");
 const progressContainer = document.querySelector(".progressbar");
 const fileURL = document.querySelector("#fileURL");
+
 const sharingbox = document.querySelector(".sharingbox");
 const copyBtn = document.querySelector("#copybtn");
+const emailForm = document.querySelector("#emailform");
 
 dropzone.addEventListener("dragover", (e)=>{
     e.preventDefault();
@@ -79,3 +83,26 @@ const updateProgress = (e) => {
     fileURL.select();
     document.execCommand("copy");
  })
+
+ emailForm.addEventListener("submit", (e) => {
+  e.preventDefault(); // stop submission
+  const formData = {
+    uuid: url.split("/").splice(-1, 1)[0],
+    emailTo: emailForm.elements["to-mail"].value,
+    emailFrom: emailForm.elements["sender-mail"].value,
+  };
+  console.log(formData);
+  fetch(emailURL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(formData),
+  })
+    .then((res) => res.json())
+    .then(({success}) => {
+      if (success) {
+        sharingbox.style.display = "none";
+      }
+    });
+ });
