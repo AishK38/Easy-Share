@@ -111,3 +111,37 @@ body, .drop-zone, .upload-container{
     transform: scaleX(0);
     transition: transform 0.25s linear;
 }
+
+.sharingbox .inputbox input{
+    width: 100%;
+    border: 2px dashed var(--border-color);
+    border-radius: 6px;
+    padding: 10px 15px;
+    font-size: 20px;
+    box-sizing: border-box;
+    background: #f4e9f0;
+    color: #ef35c7;
+    opacity: 0.6;
+}
+.inputbox img{
+    position: absolute;
+    height: 23px;
+    width: 30px;
+    right: 7px;
+    top: 12px;
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.sharingbox .inputbox{
+    position: relative;
+}
+.sharingbox{
+    width: var(--container-width);
+    margin-bottom: 30px;
+    display: 
+}
+p.expire{
+    opacity: 0.6;
+    text-align: center;
+}

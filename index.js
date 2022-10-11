@@ -7,7 +7,9 @@ const bgProgress = document.querySelector(".bg-progress");
 const percentupdates = document.querySelector("#perc");
 const progressbar = document.querySelector(".smallbar");
 const progressContainer = document.querySelector(".progressbar");
-
+const fileURL = document.querySelector("#fileURL");
+const sharingbox = document.querySelector(".sharingbox");
+const copyBtn = document.querySelector("#copybtn");
 
 dropzone.addEventListener("dragover", (e)=>{
     e.preventDefault();
@@ -66,6 +68,14 @@ const updateProgress = (e) => {
     progressbar.style.transform = `scaleX(${perc/100})`;
  }
 
- const showlink = ({file})=>{
+ const showlink = ({file: url})=>{
+    console.log(url);
     progressContainer.style.display = 'none';
+    sharingbox.style.display = 'block';
+    fileURL.value = url;
  }
+
+ copyBtn.addEventListener('click',"click", ()=>{
+    fileURL.select();
+    document.execCommand("copy");
+ })
