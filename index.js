@@ -1,3 +1,5 @@
+const { ChromeReaderMode } = require("@material-ui/icons");
+
 const dropzone = document.querySelector(".drop-zone");
 const fileinput = document.querySelector("#fileinp");
 const browsebtn = document.querySelector(".browse");
@@ -15,6 +17,10 @@ const sharingbox = document.querySelector(".sharingbox");
 const copyBtn = document.querySelector("#copybtn");
 const emailForm = document.querySelector("#emailform");
 
+const toast = document.querySelector(".toast");
+
+const maxAllowedSize = 100 * 1024 * 1024;
+
 dropzone.addEventListener("dragover", (e)=>{
     e.preventDefault();
     console.log("dragging");
@@ -25,16 +31,22 @@ dropzone.addEventListener("dragover", (e)=>{
 
 dropzone.addEventListener("dragleave", ()=>{
     dropzone.classList.remove("dragged");
+    console.log("drag ended");
 });
 
 dropzone.addEventListener("drop", (e)=>{
     e.preventDefault();
     dropzone.classList.remove("dragged");
     const files = e.dataTransfer.files;
-    console.table(files);
-    if(files.length){
+    if (files.length === 1) {
+      if (files[0].size < maxAllowedSize) {
         fileinput.files = files;
         uploadfile();
+      } else {
+        showToast("Max file size allowed is 100MB");
+      }
+    } else if (files.length > 1) {
+      showToast("You can't upload multiple files");
     }
 });
 
@@ -43,34 +55,43 @@ browsebtn.addEventListener("click", ()=>{
 });
 
 fileinput.addEventListener("change", () => {
+  if (fileinput.files[0].size > maxAllowedSize) {
+    showToast("Max file size is 100MB");
+    fileinput.value = ""; // reset the input
+    return;
+  }
   uploadfile();
 });
 
 const uploadfile = () => {
     progressContainer.style.display = "block";
-    const file = fileinput.files[0];
+    console.log("File added uploading");
+    file = fileinput.files;
     const formData = new FormData();
-    formData.append("myfile", file);
+    formData.append("myfile", file[0]);
 
     const xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = () => {
-      if(xhr.readyState === XMLHttpRequest.DONE) {  
-        console.log(xhr.response);
-        showlink(JSON.parse(xhr.response));
-      }  
+
+    xhr.upload.onerror = function () {
+      showToast(`Error in upload: ${xhr.status}.`);
+      fileinput.value = ""; // reset the input
     };
-    xhr.upload.onprogress = updateProgress;
+    xhr.upload.progress = function (e) {
+      const perc = Math.round((e.loaded / e.total) * 100);
+     // console.log(perc);
+      bgProgress.style.width = `${perc}%`;
+      percentupdates.innerText = perc;
+      progressbar.style.transform = `scaleX(${perc/100})`;
+    }  
+  
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState == XMLHttpRequest.DONE) {
+        onFileUploadSuccess(xhr.responseText);
+      }  
+    }
     xhr.open("POST", uploadurl);
     xhr.send(formData);
 };
-
-const updateProgress = (e) => {
-    const perc = Math.round((e.loaded / e.total) * 100);
-   // console.log(perc);
-    bgProgress.style.width = `${perc}%`;
-    percentupdates.innerText = perc;
-    progressbar.style.transform = `scaleX(${perc/100})`;
- }
 
  const showlink = ({file: url})=>{
     console.log(url);
@@ -82,10 +103,17 @@ const updateProgress = (e) => {
  copyBtn.addEventListener('click',"click", ()=>{
     fileURL.select();
     document.execCommand("copy");
+    showToast("Copied to clipboard");
  })
+ fileURL.addEventListener("click", () => {
+  fileURL.select();
+});
+emailForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  emailForm[2].setAttribute("disabled", "true");
+  emailForm[2].innerText = "Sending";
 
- emailForm.addEventListener("submit", (e) => {
-  e.preventDefault(); // stop submission
+  const url = fileURL.value;
   const formData = {
     uuid: url.split("/").splice(-1, 1)[0],
     emailTo: emailForm.elements["to-mail"].value,
@@ -100,9 +128,19 @@ const updateProgress = (e) => {
     body: JSON.stringify(formData),
   })
     .then((res) => res.json())
-    .then(({success}) => {
-      if (success) {
+    .then(({data}) => {
+      if (data.success) {
+        showToast("Email Sent");
         sharingbox.style.display = "none";
       }
     });
  });
+ let toastTimer;
+const showToast = (msg) => {
+  clearTimeout(toastTimer);
+  toast.innerText = msg;
+  toast.classList.add("show");
+  toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2000);
+};

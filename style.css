@@ -194,3 +194,36 @@ justify-content: space-between;
     color: #613353;
     cursor: pointer;
   }
+
+.toast {
+    position: absolute;
+    bottom: 10px;
+    right: 50%;
+    transform: translate(50%, 60px);
+    padding: 10px 20px;
+    background: rgb(172, 131, 163);
+    color: #fff;
+    border-radius: 5px;
+    font-size: 18px;
+    box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1),
+      0px 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transition: transform ease-in-out 0.2s;
+}
+  
+.show.toast {
+    transform: translate(50%, 0);
+}
+@media screen and (max-width: 900px) {
+    :root {
+      --container-width: 320px;
+    }
+    .image-vector {
+      display: none;
+    }
+    .emailbox .field {
+      flex-direction: column;
+    }
+    .emailbox .field {
+      width: 300px;
+    }
+}
